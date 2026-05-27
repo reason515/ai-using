@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="吕韧关于 AI 协作、AI 编程与工具使用的实践心得。" />
+  <meta name="author" content="吕韧" />
+  <meta property="og:title" content="AI 时代，如何与模型和工具长期协作" />
+  <meta property="og:description" content="一套关于 AI 协作、工程实践、文档化与持续迭代的个人心得。" />
+  <meta property="og:type" content="article" />
+  <title>AI 时代，如何与模型和工具长期协作 | 吕韧</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #070b14;
+      --surface: rgba(15, 23, 42, 0.78);
+      --surface-strong: rgba(15, 23, 42, 0.95);
+      --text: #e5edf8;
+      --muted: #94a3b8;
+      --subtle: #64748b;
+      --line: rgba(148, 163, 184, 0.18);
+      --blue: #38bdf8;
+      --blue-strong: #2563eb;
+      --purple: #a78bfa;
+      --green: #34d399;
+      --orange: #fbbf24;
+      --red: #fb7185;
+      --radius: 24px;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+      --max: 1120px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 8%, rgba(56, 189, 248, 0.22), transparent 26rem),
+        radial-gradient(circle at 85% 0%, rgba(167, 139, 250, 0.2), transparent 28rem),
+        radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.09), transparent 32rem),
+        var(--bg);
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.95), transparent 72%);
+      z-index: -2;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at 50% 0%, transparent, rgba(7, 11, 20, 0.86) 78%);
+      z-index: -1;
+    }
+
+    a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #7dd3fc;
+    }
+
+    .shell {
+      width: min(100% - 40px, var(--max));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(7, 11, 20, 0.72);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      min-height: 68px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      box-shadow: 0 0 28px rgba(56, 189, 248, 0.45);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .nav a {
+      color: var(--muted);
+    }
+
+    .nav a:hover {
+      color: var(--text);
+    }
+
+    .hero {
+      position: relative;
+      padding: 104px 0 72px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
+      gap: 44px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      padding: 8px 13px;
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      border-radius: 999px;
+      color: #bae6fd;
+      background: rgba(14, 165, 233, 0.08);
+      font-size: 0.88rem;
+      font-weight: 650;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--green);
+      box-shadow: 0 0 16px var(--green);
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      line-height: 1.18;
+      letter-spacing: -0.04em;
+    }
+
+    h1 {
+      max-width: 760px;
+      font-size: clamp(2.6rem, 8vw, 5.7rem);
+      font-weight: 850;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #f8fafc 8%, #7dd3fc 45%, #c4b5fd 80%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-lead {
+      max-width: 720px;
+      margin: 26px 0 0;
+      color: #cbd5e1;
+      font-size: clamp(1.08rem, 2.2vw, 1.35rem);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 36px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 20px;
+      border-radius: 999px;
+      font-weight: 700;
+      border: 1px solid rgba(148, 163, 184, 0.24);
+      color: var(--text);
+      background: rgba(15, 23, 42, 0.7);
+    }
+
+    .button.primary {
+      border: 0;
+      background: linear-gradient(135deg, var(--blue-strong), #7c3aed);
+      box-shadow: 0 18px 44px rgba(37, 99, 235, 0.28);
+    }
+
+    .hero-card {
+      position: relative;
+      padding: 26px;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 32px;
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.86), rgba(15, 23, 42, 0.56));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      background:
+        radial-gradient(circle at 20% 0%, rgba(56, 189, 248, 0.24), transparent 14rem),
+        radial-gradient(circle at 100% 100%, rgba(167, 139, 250, 0.2), transparent 14rem);
+      z-index: -1;
+    }
+
+    .signal {
+      padding: 22px;
+      border-radius: 22px;
+      background: rgba(2, 6, 23, 0.5);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+    }
+
+    .signal + .signal {
+      margin-top: 14px;
+    }
+
+    .signal-label {
+      color: var(--subtle);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .signal strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 1.3rem;
+      line-height: 1.35;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 11px;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(15, 23, 42, 0.55);
+      font-size: 0.86rem;
+    }
+
+    section {
+      scroll-margin-top: 92px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin: 70px 0 26px;
+    }
+
+    .section-kicker {
+      color: var(--blue);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .section-head h2 {
+      margin-top: 10px;
+      font-size: clamp(1.9rem, 4vw, 3rem);
+    }
+
+    .section-desc {
+      max-width: 460px;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      position: relative;
+      min-height: 100%;
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: 0 14px 42px rgba(0, 0, 0, 0.18);
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 3px;
+      background: linear-gradient(90deg, var(--blue), var(--purple));
+      opacity: 0.9;
+    }
+
+    .card.green::before {
+      background: linear-gradient(90deg, var(--green), var(--blue));
+    }
+
+    .card.orange::before {
+      background: linear-gradient(90deg, var(--orange), var(--red));
+    }
+
+    .card.purple::before {
+      background: linear-gradient(90deg, var(--purple), var(--blue));
+    }
+
+    .card h3 {
+      font-size: 1.32rem;
+      margin-bottom: 14px;
+    }
+
+    .card p {
+      margin: 0;
+      color: #cbd5e1;
+    }
+
+    .card ul {
+      margin: 14px 0 0;
+      padding-left: 1.1rem;
+      color: #cbd5e1;
+    }
+
+    .card li + li {
+      margin-top: 8px;
+    }
+
+    .tag {
+      display: inline-block;
+      margin-bottom: 14px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      color: #bae6fd;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.22);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .wide {
+      grid-column: 1 / -1;
+    }
+
+    .focus-panel {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .focus-item {
+      padding: 20px;
+      border-radius: 20px;
+      background: rgba(2, 6, 23, 0.36);
+      border: 1px solid rgba(148, 163, 184, 0.14);
+    }
+
+    .focus-item b {
+      display: block;
+      margin-bottom: 8px;
+      color: #f8fafc;
+    }
+
+    .quote {
+      margin: 0;
+      padding: 32px;
+      border: 1px solid rgba(56, 189, 248, 0.26);
+      border-radius: 30px;
+      background:
+        linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(124, 58, 237, 0.13)),
+        rgba(15, 23, 42, 0.72);
+      box-shadow: var(--shadow);
+    }
+
+    .quote p {
+      margin: 0;
+      font-size: clamp(1.28rem, 3vw, 2rem);
+      line-height: 1.45;
+      font-weight: 760;
+      letter-spacing: -0.025em;
+    }
+
+    .quote footer {
+      margin-top: 18px;
+      color: var(--muted);
+    }
+
+    .principles {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .principle {
+      padding: 24px;
+      border-radius: 24px;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      background: rgba(15, 23, 42, 0.74);
+    }
+
+    .number {
+      display: inline-flex;
+      width: 38px;
+      height: 38px;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      border-radius: 13px;
+      color: white;
+      background: linear-gradient(135deg, var(--blue-strong), #7c3aed);
+      font-weight: 850;
+      box-shadow: 0 10px 28px rgba(37, 99, 235, 0.28);
+    }
+
+    .principle h3 {
+      margin-bottom: 10px;
+      font-size: 1.15rem;
+    }
+
+    .principle p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .timeline {
+      position: relative;
+      display: grid;
+      gap: 16px;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 110px minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(15, 23, 42, 0.72);
+    }
+
+    .timeline-label {
+      color: var(--orange);
+      font-weight: 850;
+    }
+
+    .timeline-item h3 {
+      margin-bottom: 8px;
+      font-size: 1.15rem;
+    }
+
+    .timeline-item p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .final {
+      margin: 78px 0 44px;
+      padding: clamp(28px, 5vw, 48px);
+      border-radius: 34px;
+      background:
+        radial-gradient(circle at 14% 18%, rgba(56, 189, 248, 0.2), transparent 16rem),
+        radial-gradient(circle at 92% 12%, rgba(167, 139, 250, 0.22), transparent 16rem),
+        rgba(15, 23, 42, 0.88);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .final h2 {
+      font-size: clamp(1.8rem, 4vw, 3.3rem);
+      margin-bottom: 20px;
+    }
+
+    .final p {
+      max-width: 780px;
+      margin: 0 auto;
+      color: #cbd5e1;
+      font-size: 1.12rem;
+    }
+
+    .site-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 30px 0 52px;
+      border-top: 1px solid var(--line);
+      color: var(--subtle);
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 900px) {
+      .nav {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 76px;
+      }
+
+      .hero-grid,
+      .cards,
+      .principles,
+      .focus-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .section-head {
+        display: block;
+      }
+
+      .section-desc {
+        margin-top: 12px;
+      }
+
+      .timeline-item {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .shell {
+        width: min(100% - 28px, var(--max));
+      }
+
+      .topbar-inner {
+        min-height: 58px;
+      }
+
+      .brand {
+        font-size: 0.95rem;
+      }
+
+      .hero {
+        padding: 54px 0 44px;
+      }
+
+      .hero-card,
+      .card,
+      .quote,
+      .final,
+      .principle,
+      .timeline-item {
+        border-radius: 20px;
+      }
+
+      .card,
+      .hero-card,
+      .quote {
+        padding: 20px;
+      }
+
+      .hero-actions {
+        display: grid;
+      }
+
+      .button {
+        width: 100%;
+      }
+
+      .cover-break {
+        display: none;
+      }
+
+      .site-footer {
+        display: block;
+      }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .card,
+      .principle,
+      .timeline-item,
+      .button {
+        transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+      }
+
+      .card:hover,
+      .principle:hover,
+      .timeline-item:hover {
+        transform: translateY(-3px);
+        border-color: rgba(56, 189, 248, 0.36);
+      }
+
+      .button:hover {
+        transform: translateY(-1px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="#top" aria-label="返回顶部">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>AI 协作实践心得</span>
+      </a>
+      <nav class="nav" aria-label="页面导航">
+        <a href="#mindset">认知</a>
+        <a href="#strategy">策略</a>
+        <a href="#method">方法</a>
+        <a href="#compound">沉淀</a>
+        <a href="#principles">原则</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero shell">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">AI Era Working Notes</div>
+          <h1><span class="gradient-text">AI 时代，如何与模型和工具长期协作</span></h1>
+          <p class="hero-lead">
+            一套关于 AI 协作、软件工程、文档化和持续迭代的个人实践心得。重点不是追逐某个固定流程，而是在变化极快的工具环境中，建立可迁移的判断力。
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#principles">查看核心原则</a>
+            <a class="button" href="AI使用心得-PPT大纲.md">阅读 Markdown 大纲</a>
+          </div>
+          <div class="meta-row" aria-label="作者信息">
+            <span class="pill">作者：吕韧</span>
+            <span class="pill">主题：AI 协作 / AI 编程 / 工程实践</span>
+            <span class="pill">适合：GitHub Pages / 移动端阅读</span>
+          </div>
+        </div>
+
+        <aside class="hero-card" aria-label="核心摘要">
+          <div class="signal">
+            <span class="signal-label">Core Idea</span>
+            <strong>把实现细节交给 AI，把注意力留给高价值决策。</strong>
+          </div>
+          <div class="signal">
+            <span class="signal-label">Working Loop</span>
+            <strong>底层逻辑 + 不断尝试 + 总结反思 + 持续迭代。</strong>
+          </div>
+          <div class="signal">
+            <span class="signal-label">Engineering</span>
+            <strong>代码、测试和文档共同构成可维护的项目资产。</strong>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="shell">
+      <blockquote class="quote">
+        <p>AI 不会替代思考；它放大的是你已经想明白的那部分。</p>
+        <footer>所以，人越清楚目标、边界和验收标准，AI 的价值越容易被释放。</footer>
+      </blockquote>
+    </section>
+
+    <section class="shell" id="mindset">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">Part 01 · Mindset</div>
+          <h2>在变化中保持有效</h2>
+        </div>
+        <p class="section-desc">模型和工具更新太快，真正稳定的是理解问题、拆解问题和验证结果的能力。</p>
+      </div>
+
+      <div class="cards">
+        <article class="card">
+          <span class="tag">认知</span>
+          <h3>没有永恒的最佳实践</h3>
+          <p>模型进化极快，照搬旧教程和固定流程很容易失效。更可靠的路径是掌握底层逻辑，并持续试错、复盘、迭代。</p>
+          <ul>
+            <li>不要迷信唯一正确流程</li>
+            <li>把工具进化本身当作长期变量</li>
+            <li>让自己的工作方式持续升级</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <span class="tag">人的角色</span>
+          <h3>先想清楚，再让 AI 动手</h3>
+          <p>AI 最大的价值之一，是让我们在合适阶段暂时放下大量实现细节，把注意力集中到真正高价值的事项上。</p>
+          <div class="focus-panel">
+            <div class="focus-item">
+              <b>人更应聚焦</b>
+              <p>问题定义、方案权衡、边界、优先级、验收标准。</p>
+            </div>
+            <div class="focus-item">
+              <b>AI 适合承接</b>
+              <p>具体实现、样板代码、重复性修改、扩写与重构。</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="shell" id="strategy">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">Part 02 · Strategy</div>
+          <h2>更聪明地使用模型和工具</h2>
+        </div>
+        <p class="section-desc">不要把所有任务都交给同一种模型，也不要把 Cursor / Codex 只当作写代码工具。</p>
+      </div>
+
+      <div class="cards">
+        <article class="card green">
+          <span class="tag">成本策略</span>
+          <h3>贵模型做规划，普通模型搬砖</h3>
+          <ul>
+            <li>高能力模型：规划、架构、棘手问题、关键决策</li>
+            <li>普通模型：重复实现、模板代码、批量修改</li>
+            <li>核心原则：在质量和成本之间主动分层</li>
+          </ul>
+        </article>
+
+        <article class="card green">
+          <span class="tag">工具边界</span>
+          <h3>不止编程，也适合严肃脑力活</h3>
+          <p>Cursor / Codex 同样适合复杂调研、规划和方案设计。通过文档化，可以缓解网页版 AI 的上下文限制，让资料和产出沉淀为长期资产。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="shell" id="method">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">Part 03 · Method</div>
+          <h2>复杂项目需要工程节奏</h2>
+        </div>
+        <p class="section-desc">AI 可以提升速度，但复杂项目仍然需要规划、验收、测试和耐心排障。</p>
+      </div>
+
+      <div class="timeline">
+        <article class="timeline-item">
+          <div class="timeline-label">Sprint</div>
+          <div>
+            <h3>用 Scrum 节奏与 AI 协作</h3>
+            <p>每个 Sprint 做规划、执行、验收和总结。耗时可能更长，但清晰度和可控性更好，适合需求复杂、周期较长的项目。</p>
+          </div>
+        </article>
+
+        <article class="timeline-item">
+          <div class="timeline-label">TDD</div>
+          <div>
+            <h3>实例化需求 + 测试驱动开发</h3>
+            <p>用具体场景描述需求，用测试约束行为。代码和测试会共同成为活文档，后续无论人还是新的 AI 接手都更顺畅。</p>
+          </div>
+        </article>
+
+        <article class="timeline-item">
+          <div class="timeline-label">Ops</div>
+          <div>
+            <h3>AI 编程绕不开真工程</h3>
+            <p>版本管理、CI/CD、服务器部署和环境问题仍然需要耐心解决。越是这些琐碎环节，越应该让 AI 帮你沉淀注意事项、排障步骤和经验文档。</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="shell" id="compound">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">Part 04 · Compound</div>
+          <h2>让经验产生复利</h2>
+        </div>
+        <p class="section-desc">真正有价值的不是一次对话，而是被保存、复用、更新的知识资产。</p>
+      </div>
+
+      <div class="cards">
+        <article class="card purple">
+          <span class="tag">文档化</span>
+          <h3>每一次踩坑，都该变成下一项目的垫脚石</h3>
+          <ul>
+            <li>项目内：需求说明、架构决策、部署 Runbook、复盘</li>
+            <li>项目间：可复用的检查清单和模板</li>
+            <li>对新 AI / 新同事：文档就是上下文</li>
+          </ul>
+        </article>
+
+        <article class="card purple">
+          <span class="tag">Markdown</span>
+          <h3>Markdown 是 AI 协作的通用格式</h3>
+          <p>结构清晰、版本友好、AI 易读易改。需求、方案、会议纪要、运维手册都适合优先使用 Markdown。</p>
+          <p style="margin-top: 14px;">推荐工具：<a href="https://github.com/marktext/marktext" target="_blank" rel="noreferrer">MarkText</a></p>
+        </article>
+      </div>
+    </section>
+
+    <section class="shell" id="principles">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">Takeaways</div>
+          <h2>三条带走就能用的原则</h2>
+        </div>
+      </div>
+
+      <div class="principles">
+        <article class="principle">
+          <span class="number">1</span>
+          <h3>人先想清楚</h3>
+          <p>再让 AI 动手。细节交给 AI，注意力留给高价值决策。</p>
+        </article>
+
+        <article class="principle">
+          <span class="number">2</span>
+          <h3>复杂项目要有节奏</h3>
+          <p>用 Sprint 节奏、实例化需求和 TDD 提升清晰度与可控性。</p>
+        </article>
+
+        <article class="principle">
+          <span class="number">3</span>
+          <h3>一切经验文档化</h3>
+          <p>用 Markdown 连接人与 AI，让经验成为可复用的项目资产。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="shell">
+      <div class="final">
+        <h2>工具会变，底层逻辑不会。</h2>
+        <p>
+          面对快速进化的模型和工具，最重要的不是记住某个固定操作，而是持续提升判断力、表达能力、验证能力和复盘能力。
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="shell site-footer">
+    <span>作者：吕韧</span>
+    <span>AI 协作实践心得 · 适合 GitHub Pages 发布</span>
+  </footer>
+</body>
+</html>

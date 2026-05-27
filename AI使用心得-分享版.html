@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 时代，如何与模型和工具长期协作 · 吕韧</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --accent: #2563eb;
+      --accent-light: #dbeafe;
+      --accent-2: #7c3aed;
+      --green: #059669;
+      --green-bg: #ecfdf5;
+      --orange: #d97706;
+      --orange-bg: #fffbeb;
+      --purple: #7c3aed;
+      --purple-bg: #f5f3ff;
+      --radius: 10px;
+      --shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 4px 12px rgba(15, 23, 42, 0.04);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      font-size: 16px;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    body {
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    .doc {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 0 24px 48px;
+    }
+
+    /* ── Cover ── */
+    .cover {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 80px 0;
+      page-break-after: always;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cover::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(37, 99, 235, 0.04) 0%, transparent 50%),
+        linear-gradient(rgba(37, 99, 235, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(37, 99, 235, 0.06) 1px, transparent 1px);
+      background-size: auto, 32px 32px, 32px 32px;
+      z-index: 0;
+    }
+
+    .cover > * { position: relative; z-index: 1; }
+
+    .cover-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 28px;
+    }
+
+    .cover h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #1e40af, #6d28d9);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .cover .subtitle {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      margin-bottom: 48px;
+      max-width: 520px;
+    }
+
+    .cover-meta {
+      display: flex;
+      gap: 32px;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      width: 100%;
+    }
+
+    .cover-meta strong { color: var(--text); font-weight: 600; }
+
+    /* ── TOC ── */
+    .toc {
+      page-break-after: always;
+      padding: 64px 0;
+    }
+
+    .toc h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+      color: var(--text);
+    }
+
+    .toc-list {
+      list-style: none;
+      counter-reset: toc;
+    }
+
+    .toc-list li {
+      counter-increment: toc;
+      display: flex;
+      align-items: baseline;
+      padding: 10px 0;
+      border-bottom: 1px dashed var(--border);
+      font-size: 0.95rem;
+    }
+
+    .toc-list li::before {
+      content: counter(toc, decimal-leading-zero);
+      font-weight: 600;
+      color: var(--accent);
+      min-width: 2.5em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .toc-part {
+      font-weight: 600;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      margin: 20px 0 8px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Sections ── */
+    .section {
+      page-break-inside: avoid;
+      margin-bottom: 40px;
+    }
+
+    .page-break { page-break-before: always; }
+
+    .part-header {
+      margin: 48px 0 28px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .part-header .label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .part-header h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 4px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    .badge-blue   { background: var(--accent-light); color: #1d4ed8; }
+    .badge-green  { background: var(--green-bg); color: var(--green); }
+    .badge-orange { background: var(--orange-bg); color: var(--orange); }
+    .badge-purple { background: var(--purple-bg); color: var(--purple); }
+
+    .card h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      line-height: 1.35;
+      flex: 1;
+    }
+
+    .card ul {
+      margin: 0 0 0 1.2em;
+      color: var(--text);
+    }
+
+    .card li { margin-bottom: 8px; }
+    .card li:last-child { margin-bottom: 0; }
+
+    .callout {
+      margin-top: 16px;
+      padding: 14px 18px;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      border-left: 4px solid var(--accent);
+      background: var(--accent-light);
+      color: #1e3a8a;
+    }
+
+    .callout-green  { border-color: var(--green);  background: var(--green-bg);  color: #065f46; }
+    .callout-orange { border-color: var(--orange); background: var(--orange-bg); color: #92400e; }
+    .callout-purple { border-color: var(--purple); background: var(--purple-bg); color: #5b21b6; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border: 1px solid var(--border);
+    }
+
+    th {
+      background: #f1f5f9;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    td { background: var(--surface); }
+
+    .emphasis {
+      color: #dc2626;
+      font-weight: 600;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+
+    /* ── Principles grid ── */
+    .principles {
+      display: grid;
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .principle-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 18px 20px;
+      background: linear-gradient(135deg, #eff6ff, #f5f3ff);
+      border: 1px solid #bfdbfe;
+      border-radius: var(--radius);
+    }
+
+    .principle-num {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      border-radius: 8px;
+    }
+
+    .principle-item p {
+      font-size: 1.05rem;
+      font-weight: 600;
+      line-height: 1.5;
+      padding-top: 4px;
+    }
+
+    .closing-quote {
+      text-align: center;
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Appendix table ── */
+    .appendix-table th:first-child { width: 4em; }
+
+    footer.doc-footer {
+      margin-top: 48px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    /* ── Print toolbar (screen only) ── */
+    .print-hint {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 100;
+      background: var(--text);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      font-family: inherit;
+    }
+
+    .print-hint:hover { background: #334155; }
+
+    @media print {
+      body { background: #fff; }
+      .doc { max-width: 100%; padding: 0; }
+      .print-hint { display: none !important; }
+      .card { box-shadow: none; break-inside: avoid; }
+      .cover { min-height: auto; padding: 120px 0; }
+    }
+
+    @page {
+      size: A4;
+      margin: 18mm 16mm;
+    }
+  </style>
+</head>
+<body>
+
+<button class="print-hint" onclick="window.print()" title="导出为 PDF">打印 / 导出 PDF</button>
+
+<div class="doc">
+
+  <!-- 封面 -->
+  <header class="cover">
+    <span class="cover-tag">AI 协作实践</span>
+    <h1>AI 时代，如何与模型和工具长期协作</h1>
+    <p class="subtitle">个人实践心得 · 可复制的思路与节奏</p>
+    <div class="cover-meta">
+      <span><strong>作者</strong>　吕韧</span>
+      <span><strong>日期</strong>　2026 年 5 月</span>
+    </div>
+  </header>
+
+  <!-- 目录 -->
+  <nav class="toc">
+    <h2>目　录</h2>
+    <p class="toc-part">开　场</p>
+    <ol class="toc-list">
+      <li>我们面对的现实</li>
+    </ol>
+    <p class="toc-part">核心理念</p>
+    <ol class="toc-list" style="counter-reset: toc 1">
+      <li>最佳实践会过期，底层逻辑不会</li>
+      <li>先规划，再交给 AI——把注意力留给高价值事项</li>
+    </ol>
+    <p class="toc-part">策略层</p>
+    <ol class="toc-list" style="counter-reset: toc 3">
+      <li>贵模型想明白，普通模型干明白</li>
+      <li>Cursor / Codex：从写代码到做「严肃脑力活」</li>
+    </ol>
+    <p class="toc-part">方法层</p>
+    <ol class="toc-list" style="counter-reset: toc 5">
+      <li>复杂项目：试试「Sprint 节奏」</li>
+      <li>让代码和测试成为「活文档」</li>
+      <li>AI 编程仍然绕不开「真工程」</li>
+    </ol>
+    <p class="toc-part">沉淀层</p>
+    <ol class="toc-list" style="counter-reset: toc 8">
+      <li>每一次踩坑，都该变成下一项目的垫脚石</li>
+      <li>习惯 Markdown，降低协作摩擦</li>
+    </ol>
+    <p class="toc-part">结　语</p>
+    <ol class="toc-list" style="counter-reset: toc 10">
+      <li>三条带走就能用的原则</li>
+    </ol>
+  </nav>
+
+  <!-- 开场 -->
+  <div class="part-header page-break">
+    <div class="label">Part 01</div>
+    <h2>开　场</h2>
+  </div>
+
+  <article class="section card">
+    <div class="card-header">
+      <span class="badge badge-blue">开场</span>
+      <h3>我们面对的现实</h3>
+    </div>
+    <ul>
+      <li>模型与工具几乎「按月换代」，照搬旧教程容易失效</li>
+      <li>真正稳定的是：<strong>底层逻辑 + 试错 + 复盘</strong></li>
+    </ul>
+    <div class="callout">
+      <strong>本分享目标：</strong>给你一套可迁移的协作框架，而不是工具清单
+    </div>
+  </article>
+
+  <!-- 核心理念 -->
+  <div class="part-header page-break">
+    <div class="label">Part 02</div>
+    <h2>核心理念</h2>
+  </div>
+
+  <article class="section card">
+    <div class="card-header">
+      <span class="badge badge-blue">核心理念</span>
+      <h3>最佳实践会过期，底层逻辑不会</h3>
+    </div>
+    <ul>
+      <li>模型进化太快 → 不要迷信「唯一正确流程」</li>
+      <li>有效路径：优秀底层逻辑 + 不断尝试 + 总结反思</li>
+      <li>持续探索模型/工具进化，并迭代自己的工作方式</li>
+    </ul>
+  </article>
+
+  <article class="section card">
+    <div class="card-header">
+      <span class="badge badge-blue">核心理念</span>
+      <h3>先规划，再交给 AI——把注意力留给高价值事项</h3>
+    </div>
+    <div class="callout">
+      <strong>AI 最大的价值之一：</strong>让我们可以在合适的阶段暂时放下大量实现细节，把有限的注意力集中到真正高价值的事项上——问题定义、方案权衡、边界与验收。
+    </div>
+    <ul>
+      <li><strong>人更应聚焦：</strong>要解决什么问题、怎样算完成、优先级与约束</li>
+      <li><strong>AI 适合承接：</strong>具体实现、样板代码、重复性修改、扩写与重构</li>
+      <li>充分思考与规划是 ROI 最高的投入；<span class="emphasis" style="display:inline; margin:0;">懒人模式</span>则把高价值决策也一并外包，效果最差</li>
+    </ul>
+    <p style="margin-top:14px; font-size:0.88rem; color:var(--text-muted);">
+      注：实现细节并非不重要，而是分工——细节仍要审查与验收，但不必全部由人从零手工完成。
+    </p>
+  </article>
+
+  <!-- 策略层 -->
+  <div class="part-header page-break">
+    <div class="label">Part 03</div>
+    <h2>策略层</h2>
+  </div>
+
+  <article class="section card">
+    <div class="card-header">
+      <span class="badge badge-green">策略层</span>
+      <h3>贵模型想明白，普通模型干明白</h3>
+    </div>
+    <table>
+      <thead>
+        <tr><th>场景</th><th>建议模型档位</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>架构规划、方案权衡、疑难排障</td><td>高能力模型</td></tr>
+        <tr><td>批量修改、模板代码、重复劳动</td><td>普通模型</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-green">
+      <strong>原则：</strong>质量与成本主动分层，避免全程顶配
+    </div>
+  </article>
+
+  <article class="section card">
+    <div class="card-header">
+      <span class="badge badge-green">策略层</span>
+      <h3>Cursor / Codex：从写代码到做「严肃脑力活」</h3>
+    </div>
+    <ul>
+      <li>适用：复杂调研、规划、方案设计</li>
+      <li>优势：文档化缓解上下文限制</li>
+      <li>对比网页版：投喂资料与沉淀产出都更可持续</li>
+    </ul>
+  </article>
+
+  <!-- 方法层 -->
+  <div class="part-header page-break">
+    <div class="label">Part 04</div>
+    <h2>方法层</h2>
+  </div>
+
+  <article class="section card">
+    <div class="card-header">
+      <span class="badge badge-orange">方法层</span>
+      <h3>复杂项目：试试「Sprint 节奏」</h3>
+    </div>
+    <ul>
+      <li>每个 Sprint：规划 → 执行 → 验收 → 总结</li>
+      <li>可能更慢，但清晰度、可控性显著提升</li>
+      <li>适合：需求多变、周期长、多轮 AI/多人接手的项目</li>
+    </ul>
+  </article>
+
+  <article class="section card">
+    <div class="card-header">
+      <span class="badge badge-orange">方法层</span>
+      <h3>让代码和测试成为「活文档」</h3>
+    </div>
+    <ul>
+      <li><strong>实例化需求：</strong>用具体用例描述行为，减少歧义</li>
+      <li><strong>TDD：</strong>先定义可验证行为，再驱动实现</li>
+      <li>配合 Rules / Skills 固化规范</li>
+    </ul>
+    <div class="callout callout-orange">
+      <strong>结果：</strong>质量 ↑、可维护性 ↑、人机交接成本 ↓
+    </div>
+  </article>
+
+  <article class="section card">
+    <div class="card-header">
+      <span class="badge badge-orange">方法层</span>
+      <h3>AI 编程仍然绕不开「真工程」</h3>
+    </div>
+    <ul>
+      <li>版本管理、CI/CD、部署、环境——问题密集且琐碎</li>
+      <li>非软件背景用户易在此受挫 → 也是是否适合 AI 编程的试金石</li>
+      <li><strong>对策：</strong>让 AI 把经验文档化（注意事项、步骤、排障记录）</li>
+    </ul>
+  </article>
+
+  <!-- 沉淀层 -->
+  <div class="part-header page-break">
+    <div class="label">Part 05</div>
+    <h2>沉淀层</h2>
+  </div>
+
+  <article class="section card">
+    <div class="card-header">
+      <span class="badge badge-purple">沉淀层</span>
+      <h3>每一次踩坑，都该变成下一项目的垫脚石</h3>
+    </div>
+    <ul>
+      <li><strong>项目内：</strong>需求说明、架构决策、部署 Runbook、复盘</li>
+      <li><strong>项目间：</strong>可复用的检查清单与模板</li>
+      <li>对新 AI / 新同事：文档即上下文，降低重复解释成本</li>
+    </ul>
+  </article>
+
+  <article class="section card">
+    <div class="card-header">
+      <span class="badge badge-purple">沉淀层</span>
+      <h3>习惯 Markdown，降低协作摩擦</h3>
+    </div>
+    <ul>
+      <li>结构清晰、版本友好、AI 易读易改</li>
+      <li>推荐工具：<a href="https://github.com/marktext/marktext">MarkText</a>（开源 Markdown 编辑器）</li>
+      <li>实践建议：需求、方案、会议纪要、运维手册统一使用 .md</li>
+    </ul>
+    <div class="callout callout-purple">
+      Markdown 是人与 AI 协作最通用的文档格式
+    </div>
+  </article>
+
+  <!-- 结语 -->
+  <div class="part-header page-break">
+    <div class="label">结　语</div>
+    <h2>三条带走就能用的原则</h2>
+  </div>
+
+  <article class="section card">
+    <div class="principles">
+      <div class="principle-item">
+        <span class="principle-num">1</span>
+        <p>人先想清楚，再让 AI 动手——细节交给 AI，注意力留给高价值决策</p>
+      </div>
+      <div class="principle-item">
+        <span class="principle-num">2</span>
+        <p>复杂项目：Sprint 节奏 + 实例化需求 + TDD</p>
+      </div>
+      <div class="principle-item">
+        <span class="principle-num">3</span>
+        <p>一切经验文档化，用 Markdown 连接人与 AI</p>
+      </div>
+    </div>
+    <p class="closing-quote">
+      AI 不会替代思考；它放大的是——你已经想明白的那部分。
+    </p>
+  </article>
+
+  <!-- 附录：口述要点 -->
+  <div class="part-header page-break">
+    <div class="label">附　录</div>
+    <h2>单页话术参考</h2>
+  </div>
+
+  <article class="section card">
+    <table class="appendix-table">
+      <thead>
+        <tr><th>页</th><th>一句话版本</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>03</td><td>工具会变，拆解问题、验证结果、复盘迭代不会变。</td></tr>
+        <tr><td>04</td><td>细节交给 AI，人专注决策与验收；AI 是加速器，方向盘在你手里。</td></tr>
+        <tr><td>05</td><td>规划用贵的，搬砖用省的，别全程烧顶配。</td></tr>
+        <tr><td>06</td><td>把 Cursor 当「带仓库的 AI 工作台」，不只当补全工具。</td></tr>
+        <tr><td>07</td><td>和 AI 协作也要里程碑，否则只会无限对话。</td></tr>
+        <tr><td>08</td><td>测试用例就是需求说明书，代码是实现附录。</td></tr>
+        <tr><td>09</td><td>能搞定 Git、CI、部署，你才真的在「做软件」而不只是「生成代码」。</td></tr>
+        <tr><td>10</td><td>文档是给未来的你和未来的 AI 写的。</td></tr>
+      </tbody>
+    </table>
+  </article>
+
+  <footer class="doc-footer">
+    作者：吕韧 · 2026 年 5 月 · AI 协作实践心得
+  </footer>
+
+</div>
+
+</body>
+</html>
