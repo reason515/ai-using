@@ -65,10 +65,12 @@
 
 收益：质量更高、可维护性更强；人或新 AI 接手时成本更低。
 
-### 8. 文档习惯：Markdown 是 AI 的通用语
+### 8. 文档与图示：Markdown + Mermaid 连接人与 AI
 
-- 习惯用 **Markdown** 写需求、方案、复盘、Runbook
-- 推荐工具：[MarkText](https://github.com/marktext/marktext)（开源 Markdown 编辑器）
+- 习惯用 **Markdown** 写需求、方案、复盘、Runbook——结构清晰、版本友好、AI 易读易改
+- **Mermaid** 与 Markdown 同源、可内嵌：用流程图、时序图、架构图等把结构「画」清楚，同样是人与 AI 协作的极佳媒介
+- 复杂逻辑、协作流程、系统边界用图表达，往往比长段文字更少歧义、更易迭代
+- 推荐工具：Markdown 编辑 [MarkText](https://github.com/marktext/marktext)；Mermaid 可直接写在 `.md` 中，GitHub、Cursor 等均支持渲染
 
 ---
 
@@ -179,13 +181,14 @@
 - 项目间：可复用的检查清单与模板
 - 对新 AI / 新同事：文档即上下文，降低重复解释成本
 
-#### 第 11 页 · Markdown：与 AI 协作的通用格式
+#### 第 11 页 · Markdown 与 Mermaid：与 AI 协作的通用格式
 
-**标题：** 习惯 Markdown，降低协作摩擦
+**标题：** 习惯 Markdown 与 Mermaid，降低协作摩擦
 
-- 结构清晰、版本友好、AI 易读易改
-- 推荐工具：[MarkText](https://github.com/marktext/marktext)
-- 实践建议：需求、方案、会议纪要、运维手册统一用 `.md`
+- **Markdown**：写需求、方案、复盘、Runbook——文字结构化，AI 易读易改
+- **Mermaid**：与 MD 同源、可内嵌——流程图、时序图、架构图，把「结构」画清楚
+- 图示适合：协作流程、系统边界、状态流转等——比长段描述更少歧义
+- 推荐工具：[MarkText](https://github.com/marktext/marktext)；Mermaid 在 GitHub / Cursor 等环境可直接渲染
 
 ---
 
@@ -195,7 +198,7 @@
 
 1. **人先想清楚**，再让 AI 动手——把细节交给 AI，把注意力留给高价值决策  
 2. **复杂项目**：Sprint 节奏 + 实例化需求 + TDD  
-3. **一切经验文档化**，用 Markdown 连接人与 AI  
+3. **一切经验文档化**，用 Markdown 与 Mermaid 连接人与 AI  
 
 **可选收尾句：** AI 不会替代思考；它放大的是——你已经想明白的那部分。
 
@@ -213,6 +216,7 @@
 | 8 | 测试用例就是需求说明书，代码是实现附录。 |
 | 9 | 能搞定 Git、CI、部署，你才真的在「做软件」而不只是「生成代码」。 |
 | 10 | 文档是给未来的你和未来的 AI 写的。 |
+| 11 | 字用 Markdown 写清楚，结构用 Mermaid 画清楚。 |
 
 ---
 
