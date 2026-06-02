@@ -116,6 +116,32 @@
 
     .cover-meta strong { color: var(--text); font-weight: 600; }
 
+    .iteration-hero {
+      margin: 28px 0 0;
+      padding: 22px 26px;
+      border-radius: 16px;
+      border: 2px solid #2563eb;
+      background: linear-gradient(135deg, #eff6ff, #f5f3ff);
+      text-align: center;
+    }
+
+    .iteration-hero .count {
+      font-size: 3.2rem;
+      font-weight: 900;
+      line-height: 1;
+      color: #1d4ed8;
+      letter-spacing: -0.04em;
+    }
+
+    .iteration-hero .count span { font-size: 1.1rem; font-weight: 700; color: #64748b; margin-left: 6px; }
+
+    .iteration-hero p {
+      margin: 14px 0 0;
+      color: #334155;
+      font-size: 0.95rem;
+      line-height: 1.65;
+    }
+
     /* ── TOC ── */
     .toc {
       page-break-after: always;
@@ -382,6 +408,10 @@
       <span><strong>作者</strong>　吕韧</span>
       <span><strong>日期</strong>　2026 年 5 月</span>
     </div>
+    <div class="iteration-hero" aria-label="文档迭代纪实">
+      <div class="count">9<span>次修订</span></div>
+      <p><strong>本文档即「持续迭代」的样例</strong>——不是一次写就，而是实践中不断总结、修正、打磨；每一次修订都对应 Git 记录中的一次更新。</p>
+    </div>
   </header>
 
   <!-- 目录 -->
@@ -526,6 +556,7 @@
       <li>能固化约定、显著提升效率与质量</li>
       <li>前提是你先理解它们解决什么问题、该约束什么</li>
       <li>有意识地多用、多改、多复盘；只抄模板，效果往往有限</li>
+      <li>同类新工具还会涌现：选择性采用、刻意练习，不盲目跟风</li>
     </ul>
   </article>
 

@@ -4,6 +4,9 @@
 
 个人关于 AI 时代如何与模型和工具长期协作的实践总结，涵盖认知、策略、工程方法与文档沉淀。
 
+> **文档迭代：第 9 次修订**（[Git 记录](https://github.com/reason515/ai-using/commits/main)）· 最近更新：2026-05-27  
+> 这份文档本身即是「持续迭代」的样例——每一次修订，都来自实际使用后的总结与反思。
+
 ## 在线阅读
 
 - **GitHub Pages（推荐）**：部署 `index.html` 后访问站点首页
@@ -14,6 +17,7 @@
 | 文件 | 说明 |
 |------|------|
 | [index.html](./index.html) | GitHub Pages 展示页（响应式，桌面/移动端） |
+| [doc-meta.json](./doc-meta.json) | 文档迭代次数与更新日期（改文档后请同步 +1） |
 | [AI使用心得-PPT大纲.md](./AI使用心得-PPT大纲.md) | 完整大纲与精炼文案 |
 | [AI使用心得-分享版.html](./AI使用心得-分享版.html) | 适合打印/导出 PDF 的文档版 |
 | [AI使用心得.html](./AI使用心得.html) | Reveal.js 幻灯片（现场演示） |
