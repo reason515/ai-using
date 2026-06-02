@@ -117,29 +117,66 @@
     .cover-meta strong { color: var(--text); font-weight: 600; }
 
     .iteration-hero {
+      align-self: stretch;
+      width: 100%;
+      box-sizing: border-box;
       margin: 28px 0 0;
-      padding: 22px 26px;
+      padding: 24px 28px;
       border-radius: 16px;
       border: 2px solid #2563eb;
       background: linear-gradient(135deg, #eff6ff, #f5f3ff);
-      text-align: center;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 28px;
     }
 
     .iteration-hero .count {
-      font-size: 3.2rem;
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 100px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.7);
+      font-size: 2.8rem;
       font-weight: 900;
       line-height: 1;
       color: #1d4ed8;
       letter-spacing: -0.04em;
+      text-align: center;
     }
 
-    .iteration-hero .count span { font-size: 1.1rem; font-weight: 700; color: #64748b; margin-left: 6px; }
+    .iteration-hero .count span {
+      display: block;
+      margin-top: 6px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #64748b;
+      margin-left: 0;
+    }
 
-    .iteration-hero p {
-      margin: 14px 0 0;
+    .iteration-hero .iteration-text {
+      flex: 1;
+      min-width: 0;
+      margin: 0;
       color: #334155;
       font-size: 0.95rem;
       line-height: 1.65;
+      text-align: left;
+    }
+
+    @media (max-width: 640px) {
+      .iteration-hero {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .iteration-hero .iteration-text {
+        text-align: center;
+      }
     }
 
     /* ── TOC ── */
@@ -410,7 +447,7 @@
     </div>
     <div class="iteration-hero" aria-label="文档迭代纪实">
       <div class="count">10<span>次修订</span></div>
-      <p><strong>本文档即「持续迭代」的样例</strong>——不是一次写就，而是实践中不断总结、修正、打磨；每一次修订都对应 Git 记录中的一次更新。</p>
+      <p class="iteration-text"><strong>本文档即「持续迭代」的样例</strong>——不是一次写就，而是实践中不断总结、修正、打磨；每一次修订都对应 Git 记录中的一次更新。</p>
     </div>
   </header>
 

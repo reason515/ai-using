@@ -626,94 +626,124 @@
     }
 
     .iteration-banner {
-      margin: 8px 0 0;
-      padding: clamp(28px, 5vw, 40px) 0;
+      margin: 0;
+      padding: 32px 0 48px;
     }
 
     .iteration-panel {
-      display: grid;
-      grid-template-columns: auto minmax(0, 1fr);
-      gap: clamp(20px, 4vw, 36px);
-      align-items: center;
-      padding: clamp(24px, 4vw, 36px);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 28px 32px;
       border-radius: 28px;
       border: 1px solid rgba(56, 189, 248, 0.35);
       background:
         linear-gradient(135deg, rgba(37, 99, 235, 0.18), rgba(124, 58, 237, 0.12)),
         rgba(15, 23, 42, 0.88);
       box-shadow: 0 0 60px rgba(56, 189, 248, 0.12), var(--shadow);
-      overflow: hidden;
-      position: relative;
     }
 
-    .iteration-panel::after {
-      content: "LIVE ITERATION";
-      position: absolute;
-      top: 14px;
-      right: 18px;
-      font-size: 0.65rem;
+    .iteration-tag {
+      display: inline-flex;
+      align-self: flex-start;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.72rem;
       font-weight: 800;
-      letter-spacing: 0.2em;
-      color: rgba(56, 189, 248, 0.55);
+      letter-spacing: 0.12em;
+      color: #7dd3fc;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+    }
+
+    .iteration-row {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 32px;
+      width: 100%;
     }
 
     .iteration-count {
+      flex: 0 0 132px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-width: 120px;
-      padding: 16px 20px;
+      padding: 20px 16px;
       border-radius: 20px;
       background: rgba(2, 6, 23, 0.55);
       border: 1px solid rgba(56, 189, 248, 0.4);
+      text-align: center;
     }
 
     .iteration-count .num {
-      font-size: clamp(3rem, 10vw, 4.5rem);
+      display: block;
+      font-size: clamp(2.8rem, 8vw, 4rem);
       font-weight: 900;
       line-height: 1;
-      letter-spacing: -0.05em;
-      background: linear-gradient(180deg, #fff, #7dd3fc);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.04em;
+      color: #f8fafc;
     }
 
     .iteration-count .label {
+      display: block;
       margin-top: 8px;
       font-size: 0.82rem;
       font-weight: 700;
       color: var(--blue);
-      letter-spacing: 0.06em;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+
+    .iteration-body {
+      flex: 1;
+      min-width: 0;
     }
 
     .iteration-body h2 {
-      font-size: clamp(1.25rem, 3vw, 1.75rem);
+      font-size: clamp(1.2rem, 2.8vw, 1.65rem);
       margin-bottom: 12px;
+      line-height: 1.35;
     }
 
     .iteration-body p {
       margin: 0;
       color: #cbd5e1;
       font-size: 1rem;
-      max-width: 640px;
+      line-height: 1.7;
     }
 
     .iteration-body .sub {
       margin-top: 12px;
       font-size: 0.88rem;
       color: var(--subtle);
+      line-height: 1.6;
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 720px) {
       .iteration-panel {
-        grid-template-columns: 1fr;
+        padding: 24px 20px;
+      }
+
+      .iteration-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 20px;
         text-align: center;
       }
 
       .iteration-count {
+        flex: none;
+        width: 100%;
+        max-width: 200px;
         margin: 0 auto;
+      }
+
+      .iteration-tag {
+        align-self: center;
       }
     }
 
@@ -795,17 +825,20 @@
 
     <section class="iteration-banner shell" aria-label="文档迭代纪实">
       <div class="iteration-panel">
-        <div class="iteration-count" aria-label="文档迭代次数">
-          <span class="num" id="iteration-num">10</span>
-          <span class="label" id="iteration-label">次修订</span>
-        </div>
-        <div class="iteration-body">
-          <h2>本文档本身，就是「持续迭代」的样例</h2>
-          <p>
-            这份心得不是一次写就，而是在真实使用中不断补充、修正、打磨而成。
-            每一次修订，都对应一次实践后的总结与反思——我写给你的道理，也写给我自己。
-          </p>
-          <p class="sub" id="iteration-meta">计量方式：Git 提交记录 · 最近更新：2026-05-27 · 作者：吕韧</p>
+        <span class="iteration-tag">持续迭代 · 实践样例</span>
+        <div class="iteration-row">
+          <div class="iteration-count" aria-label="文档迭代次数">
+            <span class="num" id="iteration-num">10</span>
+            <span class="label" id="iteration-label">次修订</span>
+          </div>
+          <div class="iteration-body">
+            <h2>本文档本身，就是「持续迭代」的样例</h2>
+            <p>
+              这份心得不是一次写就，而是在真实使用中不断补充、修正、打磨而成。
+              每一次修订，都对应一次实践后的总结与反思——我写给你的道理，也写给我自己。
+            </p>
+            <p class="sub" id="iteration-meta">计量方式：Git 提交记录 · 最近更新：2026-05-27 · 作者：吕韧</p>
+          </div>
         </div>
       </div>
     </section>
@@ -1007,7 +1040,7 @@
 
   <footer class="shell site-footer">
     <span>作者：吕韧</span>
-    <span id="footer-revision">文档迭代：第 9 次修订（Git 记录）</span>
+    <span id="footer-revision">文档迭代：第 10 次修订（Git 记录）</span>
   </footer>
 
   <script>
