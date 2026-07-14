@@ -406,6 +406,52 @@
       grid-column: 1 / -1;
     }
 
+    .skill-source {
+      border-color: rgba(167, 139, 250, 0.3);
+      background:
+        radial-gradient(circle at 96% 0%, rgba(167, 139, 250, 0.14), transparent 20rem),
+        var(--surface);
+    }
+
+    .skill-source details {
+      margin-top: 20px;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 18px;
+      background: rgba(2, 6, 23, 0.5);
+      overflow: hidden;
+    }
+
+    .skill-source summary {
+      padding: 15px 18px;
+      cursor: pointer;
+      color: #e9d5ff;
+      font-weight: 750;
+    }
+
+    .skill-source summary::marker {
+      color: var(--purple);
+    }
+
+    .skill-source pre {
+      max-height: 620px;
+      margin: 0;
+      padding: 20px;
+      overflow: auto;
+      border-top: 1px solid rgba(148, 163, 184, 0.15);
+      color: #dbeafe;
+      background: rgba(2, 6, 23, 0.8);
+      font: 0.85rem/1.7 "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      white-space: pre;
+    }
+
+    .skill-note {
+      margin-top: 18px !important;
+      padding: 15px 17px;
+      border-left: 3px solid var(--purple);
+      border-radius: 0 14px 14px 0;
+      background: rgba(167, 139, 250, 0.08);
+    }
+
     .focus-panel {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -781,6 +827,7 @@
       <nav class="nav" aria-label="页面导航">
         <a href="#mindset">认知</a>
         <a href="#strategy">策略</a>
+        <a href="#skills">Skills</a>
         <a href="#method">方法</a>
         <a href="#compound">沉淀</a>
         <a href="#principles">原则</a>
@@ -806,7 +853,7 @@
             <span class="pill">作者：吕韧</span>
             <span class="pill">主题：AI 协作 / AI 编程 / 工程实践</span>
             <span class="pill">适合：GitHub Pages / 移动端阅读</span>
-            <span class="pill" id="hero-revision-pill">文档迭代：第 14 次修订</span>
+            <span class="pill" id="hero-revision-pill">文档迭代：第 15 次修订</span>
           </div>
         </div>
 
@@ -829,7 +876,7 @@
       <div class="iteration-panel" aria-label="文档迭代纪实">
         <span class="iteration-tag">持续迭代 · 实践样例</span>
         <div class="iteration-count" aria-label="文档迭代次数">
-          <span class="num" id="iteration-num">14</span>
+          <span class="num" id="iteration-num">15</span>
           <span class="label" id="iteration-label">次修订</span>
         </div>
         <div class="iteration-body">
@@ -838,7 +885,7 @@
             这份心得不是一次写就，而是在真实使用中不断补充、修正、打磨而成。
             每一次修订，都对应一次实践后的总结与反思——我写给你的道理，也写给我自己。
           </p>
-          <p class="sub" id="iteration-meta">计量方式：Git 提交记录 · 最近更新：2026-06-03 · 作者：吕韧</p>
+          <p class="sub" id="iteration-meta">计量方式：Git 提交记录 · 最近更新：2026-07-14 · 作者：吕韧</p>
         </div>
       </div>
       </div>
@@ -927,7 +974,75 @@
         <article class="card green wide">
           <span class="tag">Rules / Skills</span>
           <h3>用起来，才真正懂</h3>
-          <p>Rules、Skills 等机制能显著提升效率与质量，把反复验证的约定固化给 AI。前提是你自己先形成理解——清楚它们解决什么问题、该约束什么；这往往需要有意识地多用、多改、多复盘，而不是只抄模板。同类新概念、新工具还会持续涌现，结合自身实际情况选择性采用即可——有自己的理解和实践，比追热点更重要。</p>
+          <p>Rules、Skills 等机制能显著提升效率与质量，把反复验证的约定固化给 AI。投标的通用流程、方案中严谨且避免过度承诺的表达规范、Markdown 转公司模板 Word 的格式细节，都是很适合沉淀为 Skill 的内容。</p>
+          <p style="margin-top:14px;">每一次修改中验证有效的规则，都可以反哺 Skill。这样做的价值不只是减少下一次的沟通与返工，更是让个人经验成为整个组织可传承、可迭代的资产。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="shell" id="skills">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">Part 03 · Skill Showcase</div>
+          <h2>一个值得直接复用的 Skill</h2>
+        </div>
+        <p class="section-desc">Skill 的价值，在于把经过实践验证的工作方式固化下来，并让它在每一次协作中稳定复用。</p>
+      </div>
+
+      <div class="cards">
+        <article class="card purple wide skill-source">
+          <span class="tag">first-principles-working-style</span>
+          <h3>第一性原理工作方式</h3>
+          <p>以下直接展示当前使用的中文版本 Skill 内容。</p>
+
+          <details open>
+            <summary>Skill 内容（点击可收起）</summary>
+            <pre><code>---
+name: first-principles-working-style
+description: &gt;-
+  采用第一性原理开展协作：从底层问题出发，在行动前澄清目标，并在用户提出的路径并非最优时给出更好的方案。适用于任务开始、需求含糊、规划或重构阶段，以及用户在目标尚未明确时直接指定解决方案的场景。
+---
+
+# 第一性原理工作方式
+
+## 工作方式
+
+- 使用第一性原理思考。
+- 不要假设用户总是准确知道自己想要什么，或知道达成目标的最佳路径。
+- 保持审慎，从原始问题和底层需求出发进行推理。
+- 如果用户的动机或目标不明确，先暂停并讨论，再继续执行。
+- 如果目标明确，但用户提出的路径并非最短或最优，应说明这一点并提出更好的方案。
+
+## 应用方法
+
+### 开始执行前
+
+- 用一句话复述底层需求，而不是复述用户指定的实现方式。
+- 如果底层需求与用户提出的方案不一致，简要指出差距；不要悄悄执行次优方案。
+- 如果范围、成功标准或约束条件缺失，暂停并提出 1–3 个聚焦的问题，而不是列出冗长问卷。
+
+### 目标明确后
+
+- 以能够验证思路的最小步骤推进。
+- 如果存在更短或更安全的路径，用通俗语言说明其收益、取舍和你的建议。
+- 当用户已经了解取舍并作出选择后，不要因追求完美而阻碍推进。
+
+## 应避免的做法
+
+- 把每一条消息都当成立即开始编码的指令。
+- 长篇说教，或重复罗列「工作方式」中的原则。
+- 本可用一个澄清问题解决时，却提出大量问题。
+
+## 快速示例
+
+| 情况 | 建议做法 |
+| --- | --- |
+| 用户说「加 Redis 缓存」，但没有说明性能问题 | 询问要改善的症状或指标；必要时建议先测量。 |
+| 用户说「重构整个模块」，但实际只需修复一个 bug | 确认定向修复是否足够；如有必要，再提供适度重构的选项。 |
+| 已有可复现步骤的明确 bug 报告 | 直接修复或排查；除非修复范围不明确，否则不要额外进行目标澄清。 |</code></pre>
+          </details>
+
+          <p class="skill-note"><strong>分享解读：</strong>它把「先理解真实需求，再选择实现路径」固化为 AI 的默认协作方式：既避免机械执行次优方案，也避免无休止追问；目标明确后，以最小可验证步骤快速推进。</p>
         </article>
       </div>
     </section>
@@ -935,7 +1050,7 @@
     <section class="shell" id="method">
       <div class="section-head">
         <div>
-          <div class="section-kicker">Part 03 · Method</div>
+          <div class="section-kicker">Part 04 · Method</div>
           <h2>复杂项目需要工程节奏</h2>
         </div>
         <p class="section-desc">AI 可以提升速度，但复杂项目仍然需要规划、验收、测试和耐心排障。</p>
@@ -971,7 +1086,7 @@
     <section class="shell" id="compound">
       <div class="section-head">
         <div>
-          <div class="section-kicker">Part 04 · Compound</div>
+          <div class="section-kicker">Part 05 · Compound</div>
           <h2>让经验产生复利</h2>
         </div>
         <p class="section-desc">真正有价值的不是一次对话，而是被保存、复用、更新的知识资产。</p>
@@ -1042,7 +1157,7 @@
 
   <footer class="shell site-footer">
     <span>作者：吕韧</span>
-    <span id="footer-revision">文档迭代：第 14 次修订（Git 记录）</span>
+    <span id="footer-revision">文档迭代：第 15 次修订（Git 记录）</span>
   </footer>
 
   <script>
