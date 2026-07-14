@@ -1162,7 +1162,7 @@ description: &gt;-
 
   <script>
     (function () {
-      fetch("doc-meta.json")
+      fetch("doc-meta.json?v=15", { cache: "no-store" })
         .then(function (r) { return r.json(); })
         .then(function (d) {
           var n = document.getElementById("iteration-num");
