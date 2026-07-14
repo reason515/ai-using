@@ -331,6 +331,51 @@
       font-size: 1rem;
     }
 
+    .mindset-head,
+    .strategy-head,
+    .skills-head {
+      align-items: center;
+      margin-bottom: 22px;
+      padding: 26px 30px;
+      border-radius: var(--radius);
+      background: rgba(15, 23, 42, 0.62);
+    }
+
+    .mindset-head {
+      border: 1px solid rgba(56, 189, 248, 0.22);
+      background: linear-gradient(105deg, rgba(56, 189, 248, 0.11), transparent 58%), rgba(15, 23, 42, 0.62);
+    }
+
+    .strategy-head {
+      border: 1px solid rgba(52, 211, 153, 0.22);
+      background: linear-gradient(105deg, rgba(52, 211, 153, 0.11), transparent 58%), rgba(15, 23, 42, 0.62);
+    }
+
+    .skills-head {
+      border: 1px solid rgba(167, 139, 250, 0.22);
+      background: linear-gradient(105deg, rgba(167, 139, 250, 0.11), transparent 58%), rgba(15, 23, 42, 0.62);
+    }
+
+    .mindset-head .section-desc,
+    .strategy-head .section-desc,
+    .skills-head .section-desc {
+      max-width: 500px;
+      margin: 0;
+      padding-left: 28px;
+    }
+
+    .mindset-head .section-desc {
+      border-left: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .strategy-head .section-desc {
+      border-left: 1px solid rgba(52, 211, 153, 0.3);
+    }
+
+    .skills-head .section-desc {
+      border-left: 1px solid rgba(167, 139, 250, 0.28);
+    }
+
     .compound-head {
       align-items: center;
       margin-bottom: 22px;
@@ -660,12 +705,19 @@
         margin-top: 12px;
       }
 
-      .compound-head {
+      .compound-head,
+      .method-head,
+      .mindset-head,
+      .strategy-head,
+      .skills-head {
         padding: 24px;
       }
 
       .compound-head .section-desc,
-      .method-head .section-desc {
+      .method-head .section-desc,
+      .mindset-head .section-desc,
+      .strategy-head .section-desc,
+      .skills-head .section-desc {
         margin-top: 16px;
         padding: 16px 0 0;
         border-left: 0;
@@ -679,8 +731,16 @@
         border-top: 1px solid rgba(251, 191, 36, 0.3);
       }
 
-      .method-head {
-        padding: 24px;
+      .mindset-head .section-desc {
+        border-top: 1px solid rgba(56, 189, 248, 0.3);
+      }
+
+      .strategy-head .section-desc {
+        border-top: 1px solid rgba(52, 211, 153, 0.3);
+      }
+
+      .skills-head .section-desc {
+        border-top: 1px solid rgba(167, 139, 250, 0.28);
       }
 
       .timeline-item {
@@ -957,7 +1017,7 @@
     </section>
 
     <section class="shell" id="mindset">
-      <div class="section-head">
+      <div class="section-head mindset-head">
         <div>
           <div class="section-kicker">Part 01 · Mindset</div>
           <h2>在变化中保持有效</h2>
@@ -1004,7 +1064,7 @@
     </section>
 
     <section class="shell" id="strategy">
-      <div class="section-head">
+      <div class="section-head strategy-head">
         <div>
           <div class="section-kicker">Part 02 · Strategy</div>
           <h2>更聪明地使用模型和工具</h2>
@@ -1039,7 +1099,7 @@
     </section>
 
     <section class="shell" id="skills">
-      <div class="section-head">
+      <div class="section-head skills-head">
         <div>
           <div class="section-kicker">Part 03 · Skill Showcase</div>
           <h2>一个值得直接复用的 Skill</h2>
