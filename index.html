@@ -513,16 +513,102 @@
       color: var(--purple);
     }
 
-    .skill-source pre {
-      max-height: 620px;
-      margin: 0;
-      padding: 20px;
-      overflow: auto;
+    .skill-preview {
+      padding: 22px;
       border-top: 1px solid rgba(148, 163, 184, 0.15);
-      color: #dbeafe;
-      background: rgba(2, 6, 23, 0.8);
-      font: 0.85rem/1.7 "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-      white-space: pre;
+      background: rgba(2, 6, 23, 0.52);
+    }
+
+    .skill-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .skill-meta code {
+      padding: 4px 8px;
+      border: 1px solid rgba(167, 139, 250, 0.28);
+      border-radius: 7px;
+      color: #e9d5ff;
+      background: rgba(167, 139, 250, 0.1);
+      font: 0.82rem "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    }
+
+    .skill-description {
+      margin: 0 0 18px !important;
+      padding: 14px 16px;
+      border-radius: 14px;
+      color: #dbeafe !important;
+      background: rgba(56, 189, 248, 0.07);
+      border: 1px solid rgba(56, 189, 248, 0.16);
+    }
+
+    .skill-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .skill-block {
+      padding: 18px;
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.6);
+    }
+
+    .skill-block h4 {
+      margin: 0 0 12px;
+      color: #f1e8ff;
+      font-size: 1rem;
+    }
+
+    .skill-block h5 {
+      margin: 16px 0 8px;
+      color: #c4b5fd;
+      font-size: 0.88rem;
+    }
+
+    .skill-block h5:first-of-type {
+      margin-top: 0;
+    }
+
+    .skill-block ul {
+      margin: 0;
+      padding-left: 1.1rem;
+      color: #cbd5e1;
+    }
+
+    .skill-block li + li {
+      margin-top: 8px;
+    }
+
+    .skill-examples {
+      grid-column: 1 / -1;
+    }
+
+    .skill-examples table {
+      width: 100%;
+      border-collapse: collapse;
+      color: #cbd5e1;
+      font-size: 0.92rem;
+    }
+
+    .skill-examples th,
+    .skill-examples td {
+      padding: 11px 12px;
+      text-align: left;
+      vertical-align: top;
+      border-top: 1px solid rgba(148, 163, 184, 0.14);
+    }
+
+    .skill-examples th {
+      color: #e9d5ff;
+      font-size: 0.82rem;
+      letter-spacing: 0.05em;
     }
 
     .skill-note {
@@ -693,7 +779,8 @@
       .hero-grid,
       .cards,
       .principles,
-      .focus-panel {
+      .focus-panel,
+      .skill-preview-grid {
         grid-template-columns: 1fr;
       }
 
@@ -1114,50 +1201,64 @@
           <p>以下直接展示当前使用的中文版本 Skill 内容。</p>
 
           <details open>
-            <summary>Skill 内容（点击可收起）</summary>
-            <pre><code>---
-name: first-principles-working-style
-description: &gt;-
-  采用第一性原理开展协作：从底层问题出发，在行动前澄清目标，并在用户提出的路径并非最优时给出更好的方案。适用于任务开始、需求含糊、规划或重构阶段，以及用户在目标尚未明确时直接指定解决方案的场景。
----
+            <summary>Skill 内容预览（点击可收起）</summary>
+            <div class="skill-preview">
+              <div class="skill-meta">
+                <span>Skill 名称</span>
+                <code>first-principles-working-style</code>
+              </div>
+              <p class="skill-description">采用第一性原理开展协作：从底层问题出发，在行动前澄清目标，并在用户提出的路径并非最优时给出更好的方案。适用于任务开始、需求含糊、规划或重构阶段，以及用户在目标尚未明确时直接指定解决方案的场景。</p>
 
-# 第一性原理工作方式
+              <div class="skill-preview-grid">
+                <section class="skill-block">
+                  <h4>工作方式</h4>
+                  <ul>
+                    <li>使用第一性原理思考。</li>
+                    <li>不要假设用户总是准确知道自己想要什么，或知道达成目标的最佳路径。</li>
+                    <li>保持审慎，从原始问题和底层需求出发进行推理。</li>
+                    <li>如果用户的动机或目标不明确，先暂停并讨论，再继续执行。</li>
+                    <li>如果目标明确，但用户提出的路径并非最短或最优，应说明这一点并提出更好的方案。</li>
+                  </ul>
+                </section>
 
-## 工作方式
+                <section class="skill-block">
+                  <h4>应用方法</h4>
+                  <h5>开始执行前</h5>
+                  <ul>
+                    <li>用一句话复述底层需求，而不是复述用户指定的实现方式。</li>
+                    <li>如果底层需求与用户提出的方案不一致，简要指出差距；不要悄悄执行次优方案。</li>
+                    <li>如果范围、成功标准或约束条件缺失，暂停并提出 1–3 个聚焦的问题，而不是列出冗长问卷。</li>
+                  </ul>
+                  <h5>目标明确后</h5>
+                  <ul>
+                    <li>以能够验证思路的最小步骤推进。</li>
+                    <li>如果存在更短或更安全的路径，用通俗语言说明其收益、取舍和你的建议。</li>
+                    <li>当用户已经了解取舍并作出选择后，不要因追求完美而阻碍推进。</li>
+                  </ul>
+                </section>
 
-- 使用第一性原理思考。
-- 不要假设用户总是准确知道自己想要什么，或知道达成目标的最佳路径。
-- 保持审慎，从原始问题和底层需求出发进行推理。
-- 如果用户的动机或目标不明确，先暂停并讨论，再继续执行。
-- 如果目标明确，但用户提出的路径并非最短或最优，应说明这一点并提出更好的方案。
+                <section class="skill-block">
+                  <h4>应避免的做法</h4>
+                  <ul>
+                    <li>把每一条消息都当成立即开始编码的指令。</li>
+                    <li>长篇说教，或重复罗列「工作方式」中的原则。</li>
+                    <li>本可用一个澄清问题解决时，却提出大量问题。</li>
+                  </ul>
+                </section>
 
-## 应用方法
-
-### 开始执行前
-
-- 用一句话复述底层需求，而不是复述用户指定的实现方式。
-- 如果底层需求与用户提出的方案不一致，简要指出差距；不要悄悄执行次优方案。
-- 如果范围、成功标准或约束条件缺失，暂停并提出 1–3 个聚焦的问题，而不是列出冗长问卷。
-
-### 目标明确后
-
-- 以能够验证思路的最小步骤推进。
-- 如果存在更短或更安全的路径，用通俗语言说明其收益、取舍和你的建议。
-- 当用户已经了解取舍并作出选择后，不要因追求完美而阻碍推进。
-
-## 应避免的做法
-
-- 把每一条消息都当成立即开始编码的指令。
-- 长篇说教，或重复罗列「工作方式」中的原则。
-- 本可用一个澄清问题解决时，却提出大量问题。
-
-## 快速示例
-
-| 情况 | 建议做法 |
-| --- | --- |
-| 用户说「加 Redis 缓存」，但没有说明性能问题 | 询问要改善的症状或指标；必要时建议先测量。 |
-| 用户说「重构整个模块」，但实际只需修复一个 bug | 确认定向修复是否足够；如有必要，再提供适度重构的选项。 |
-| 已有可复现步骤的明确 bug 报告 | 直接修复或排查；除非修复范围不明确，否则不要额外进行目标澄清。 |</code></pre>
+                <section class="skill-block skill-examples">
+                  <h4>快速示例</h4>
+                  <table>
+                    <thead><tr><th>情况</th><th>建议做法</th></tr></thead>
+                    <tbody>
+                      <tr><td>用户说「加 Redis 缓存」，但没有说明性能问题</td><td>询问要改善的症状或指标；必要时建议先测量。</td></tr>
+                      <tr><td>用户说「重构整个模块」，但实际只需修复一个 bug</td><td>确认定向修复是否足够；如有必要，再提供适度重构的选项。</td></tr>
+                      <tr><td>已有可复现步骤的明确 bug 报告</td><td>直接修复或排查；除非修复范围不明确，否则不要额外进行目标澄清。</td></tr>
+                    </tbody>
+                  </table>
+                </section>
+              </div>
+            </div>
           </details>
 
           <p class="skill-note"><strong>分享解读：</strong>它把「先理解真实需求，再选择实现路径」固化为 AI 的默认协作方式：既避免机械执行次优方案，也避免无休止追问；目标明确后，以最小可验证步骤快速推进。</p>
