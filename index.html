@@ -331,6 +331,24 @@
       font-size: 1rem;
     }
 
+    .compound-head {
+      align-items: center;
+      margin-bottom: 22px;
+      padding: 26px 30px;
+      border: 1px solid rgba(167, 139, 250, 0.22);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(105deg, rgba(167, 139, 250, 0.12), transparent 58%),
+        rgba(15, 23, 42, 0.62);
+    }
+
+    .compound-head .section-desc {
+      max-width: 500px;
+      margin: 0;
+      padding-left: 28px;
+      border-left: 1px solid rgba(167, 139, 250, 0.28);
+    }
+
     .cards {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -622,6 +640,17 @@
 
       .section-desc {
         margin-top: 12px;
+      }
+
+      .compound-head {
+        padding: 24px;
+      }
+
+      .compound-head .section-desc {
+        margin-top: 16px;
+        padding: 16px 0 0;
+        border-top: 1px solid rgba(167, 139, 250, 0.28);
+        border-left: 0;
       }
 
       .timeline-item {
@@ -1083,7 +1112,7 @@ description: &gt;-
     </section>
 
     <section class="shell" id="compound">
-      <div class="section-head">
+      <div class="section-head compound-head">
         <div>
           <div class="section-kicker">Part 05 · Compound</div>
           <h2>让经验产生复利</h2>
@@ -1092,7 +1121,7 @@ description: &gt;-
       </div>
 
       <div class="cards">
-        <article class="card purple">
+        <article class="card purple wide">
           <span class="tag">文档化</span>
           <h3>每一次踩坑，都该变成下一项目的垫脚石</h3>
           <ul>
